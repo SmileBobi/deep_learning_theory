@@ -288,7 +288,8 @@ def Instancenorm(x, gamma, beta):
 ## 3.4  Group Normalization
 **简述** <br>
 - nn.GroupNorm 是 PyTorch 中 torch.nn 模块提供的一种归一化层，名为组归一化（Group Normalization）。它是为了解决批量归一化（Batch Normalization）在小批量数据下效果不佳的问题而提出的，在目标检测、图像分割等计算机视觉任务以及自然语言处理等领域都有应用。
-- 组归一化将输入特征通道分成多个组，然后对每个组内的特征进行归一化处理。它不像批量归一化那样依赖于批量大小，因此在小批量数据（甚至批量大小为 1）的情况下，也能保持较好的归一化效果，有助于提高模型的训练稳定性和泛化能力。
+- 组归一化将输入特征通道分成多个组，然后对每个组内的特征进行归一化处理。它不像批量归一化那样依赖于批量大小，因此在小批量数据（甚至批量大小为 1）的情况下，也能保持较好的归一化效果，有助于提高模型的训练稳定性和泛化能力。<br>
+
 **原理** <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要是针对Batch Normalization对小batchsize效果差，GN将channel方向分group，然后每个group内做归一化，算(C//G)*H*W的均值，这样与batchsize无关，不受其约束。<br>
 ![figure15](images/Group-Normalization-工作原理.jpg)
