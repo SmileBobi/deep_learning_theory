@@ -1,4 +1,4 @@
-# 1 Convolution
+# 1 Convolution Layers  卷积层
 ## 1.1 Conv2D
 - 示意图<br>
 ![figure](images/op-figure1.jpg)
@@ -72,7 +72,7 @@ output.size()
 - **`padding_mode`**：填充模式，可选值有 `'zeros'`（零填充）等，默认值为 `'zeros'`。
 
 
-# 2 线性变换层
+# 2 Linear Layers  线性变换层
 ## 2.1 Linear/Gemm
 **图示** <br>
 ![figure9](images/op-figure9.jpg)
@@ -85,7 +85,13 @@ m = nn.Linear(20, 30) # A[m,k]*W[k,n] = O[m,n] --> 20 = k, 30 = n
 input = torch.randn(128, 20)
 output = m(input)
 print(output.size())
+
+# torch.nn.Linear(in_features, out_features, bias=True)
 ```
+- **`in_features`**：输入特征的数量，也就是输入张量的最后一个维度的大小。例如，如果输入是一个形状为 `(batch_size, 10)` 的张量，那么 `in_features` 就应该设置为 10。
+- **`out_features`**：输出特征的数量，即经过线性变换后输出张量的最后一个维度的大小。
+- **`bias`**：一个布尔值，用于指定是否在线性变换中添加偏置项。默认值为 `True`，表示添加偏置项；若设置为 `False`，则不添加偏置项。
+
 
 ## 2.2 matmul 相关
 **图示** <br>
@@ -112,7 +118,7 @@ res = torch.bmm(input, mat2)
 res.size()
 ```
 
-# 3 Normalization
+# 3 Normalization Layers  归一化层
 **几种Normalization 对比** <br>
 ![figure4](images/op-figure4.jpg)
 
