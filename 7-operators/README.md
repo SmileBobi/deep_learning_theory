@@ -17,6 +17,16 @@ input = torch.randn(20, 16, 50, 100)
 output = m(input)
 ```
 
+- **`in_channels`**：输入数据的通道数。例如，对于 RGB 彩色图像，`in_channels` 通常为 3；对于灰度图像，`in_channels` 为 1。
+- **`out_channels`**：卷积层输出的通道数，也就是卷积核的数量。每个卷积核会生成一个特征图，因此 `out_channels` 决定了卷积层输出的特征图数量。
+- **`kernel_size`**：卷积核的大小。可以是一个整数，表示正方形卷积核的边长；也可以是一个元组 `(h, w)`，分别表示卷积核的高度和宽度。
+- **`stride`**：卷积核在输入数据上滑动的步长。默认值为 1。可以是一个整数或元组 `(h_stride, w_stride)`。
+- **`padding`**：在输入数据的边界周围填充的像素数，用于控制输出特征图的尺寸。默认值为 0。可以是一个整数或元组 `(h_padding, w_padding)`。
+- **`dilation`**：卷积核元素之间的间距。默认值为 1。可以是一个整数或元组 `(h_dilation, w_dilation)`。
+- **`groups`**：将输入通道和输出通道进行分组的数量。默认值为 1，表示所有输入通道都与所有输出通道进行卷积。
+- **`bias`**：一个布尔值，指示是否在卷积层中添加偏置项。默认值为 `True`。
+- **`padding_mode`**：填充模式，可选值有 `'zeros'`（零填充）、`'reflect'`（反射填充）等。默认值为 `'zeros'`。
+
 ## 1.2 ConvTranspose2d
 - 图示 <br>
 ![figure2](images/op-figure2.jpg)
