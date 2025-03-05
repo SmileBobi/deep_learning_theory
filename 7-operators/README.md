@@ -16,8 +16,7 @@ m = nn.Conv2d(16, 33, (3, 5), stride=(2, 1), padding=(4, 2), dilation=(3, 1))
 input = torch.randn(20, 16, 50, 100)
 output = m(input)
 
-torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, 
-                    dilation=1, groups=1, bias=True, padding_mode='zeros')
+#  torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros')
 ```
 
 - **`in_channels`**：输入数据的通道数。例如，对于 RGB 彩色图像，`in_channels` 通常为 3；对于灰度图像，`in_channels` 为 1。
