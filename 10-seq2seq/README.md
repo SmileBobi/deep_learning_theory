@@ -16,7 +16,7 @@
 ## 1.2 RNN 应用场景
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值得注意的是，RNN的输入是 $x_{1}, x_{2}, \dots, x_{n}$ ，输出为 $y_{1}, y_{2}, \dots, y_{n}$ ，也就是说，输入和输出序列必须要是等长的。由于这个限制的存在，经典RNN的适用范围比较小，但也有一些问题适合用经典的RNN结构建模. <br>
 
-### 1.2.1 RNN 解决 N VS N 问题
+### 1.2.1 RNN 解决 N TO N 问题
 - ner 问题；
 - 完形填空问题等；
 
@@ -26,7 +26,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种结构通常用来处理序列分类问题。如输入一段文字判别它所属的类别，输入一个句子判断其情感倾向，输入一段视频并判断它的类别等等。<br>
 
-### 1.2.3 RNN 解决 1 VS N 问题
+### 1.2.3 RNN 解决 1 TO N 问题
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当输入不是序列而输出为序列的情况怎么处理？我们可以只在序列开始进行输入计算：<br>
 
 ![1 vs N](images/seq2seq-figure3.jpg)
@@ -39,14 +39,14 @@
 
 ![1 vs N](images/seq2seq-figure5.jpg)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种1 VS N的结构可以处理的问题有：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种1 TO N的结构可以处理的问题有：<br>
 - 从图像生成文字（image caption），此时输入的X就是图像的特征，而输出的y序列就是一段句子
 - 从类别生成语音或音乐等
 
-## 1.3 N VS M 型任务
+## 1.3 N TO M 型任务
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假如输入序列长度为N，输出序列长度M(**不确定具体长度**)， M≠N时，RNN就无法直接解决，然而我们遇到的大部分问题序列都是不等长的，如机器翻译中，源语言和目标语言的句子往往并没有相同的长度。<br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此出现了RNN最重要的一种任务：N vs M 问题。解决此问题的结构称之为**Encoder-Decoder模型**，也可以称之为**Seq2Seq模型**。<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此出现了RNN最重要的一种任务：N to M 问题。解决此问题的结构称之为**Encoder-Decoder架构**，也可以称之为**Seq2Seq问题**。<br>
 
 # 2 Seq2Seq 模型
 

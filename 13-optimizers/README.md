@@ -192,7 +192,7 @@ RMSProp（Root Mean Square Propagation）算法中，RMS指的是均方根（Roo
 
 # 7 Adadelta
 ## 7.1 概述
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adadelta 是对 Adagrad 和 RMSProp 的扩展，AgaGrad会累加所有历史梯度的平方，而Adadelta只累加固定大小的项，并且也不直接存储这些项，仅仅是近似计算对应的平均值。另外，学习率也可以设置为 $RMS[\Delta \theta]$ . <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adadelta 是对 Adagrad 和 RMSProp 的扩展，AdaGrad会累加所有历史梯度的平方，而Adadelta只累加固定大小的项，并且也不直接存储这些项，仅仅是近似计算对应的平均值。另外，学习率也可以设置为 $RMS[\Delta \theta]$ . <br>
 
 ## 7.2 算法流程
 ![algorithm9](images/optimizer-algorithm9.jpg)
