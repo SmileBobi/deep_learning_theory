@@ -29,6 +29,7 @@ output = m(input)
 - **`bias`**：一个布尔值，指示是否在卷积层中添加偏置项。默认值为 `True`。
 - **`padding_mode`**：填充模式，可选值有 `'zeros'`（零填充）、`'reflect'`（反射填充）等。默认值为 `'zeros'`。
 
+
 ## 1.2 ConvTranspose2d
 - 图示 <br>
 ![figure2](images/op-figure2.jpg)
@@ -53,7 +54,23 @@ h.size()
 
 output = upsample(h, output_size=input.size())
 output.size()
+
+# torch.nn.ConvTranspose2d(in_channels, out_channels, kernel_size, stride=1, 
+							padding=0, output_padding=0, groups=1, 
+							bias=True, dilation=1, padding_mode='zeros')
 ```
+
+- **`in_channels`**：输入数据的通道数。例如在处理图像时，可能对应着前一层输出的特征图数量。
+- **`out_channels`**：转置卷积层输出的通道数，也就是生成的特征图数量。
+- **`kernel_size`**：卷积核的大小。可以是一个整数，表示正方形卷积核的边长；也可以是一个元组 `(h, w)`，分别表示卷积核的高度和宽度。
+- **`stride`**：卷积核在输入数据上滑动的步长，它会影响输出特征图的尺寸。默认值为 1，可以是一个整数或元组 `(h_stride, w_stride)`。
+- **`padding`**：在输入数据的边界周围填充的像素数，用于控制输出特征图的尺寸。默认值为 0，可以是一个整数或元组 `(h_padding, w_padding)`。
+- **`output_padding`**：在输出特征图的边界周围额外添加的像素数，用于进一步调整输出尺寸。默认值为 0，可以是一个整数或元组 `(h_output_padding, w_output_padding)`。
+- **`groups`**：将输入通道和输出通道进行分组的数量。默认值为 1，表示所有输入通道都与所有输出通道进行卷积。
+- **`bias`**：一个布尔值，指示是否在转置卷积层中添加偏置项。默认值为 `True`。
+- **`dilation`**：卷积核元素之间的间距。默认值为 1，可以是一个整数或元组 `(h_dilation, w_dilation)`。
+- **`padding_mode`**：填充模式，可选值有 `'zeros'`（零填充）等，默认值为 `'zeros'`。
+
 
 # 2 线性变换层
 ## 2.1 Linear/Gemm
