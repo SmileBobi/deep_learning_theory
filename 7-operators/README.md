@@ -195,6 +195,8 @@ def Batchnorm(x, gamma, beta, bn_param):
 - BN不适用于深度不固定的网络（如 RNN 中的sequence长度），而LayerNorm对深度网络的某一层的所有神经元进行标准化操作，非常适合用于序列化输入。<br>
 - LN一般只用于RNN的场景下，在CNN中LN规范化效果不如BN,GN,IN。
 - LN 再NLP中对最后一个维度求均值和方差，需注意的是可训练的weight 和 bias shape 等于最后一个维度，即一个embedding 的index 对应一个权重和bias.
+- nn.LayerNorm 是 PyTorch 中 torch.nn 模块里用于构建层归一化（Layer Normalization）层的类。层归一化是一种用于深度学习模型的归一化技术，和批量归一化（nn.BatchNorm2d）等归一化方法不同，它在自然语言处理（NLP）、计算机视觉等领域有着广泛的应用，尤其在 Transformer 架构中是关键组件之一。
+- 层归一化的主要目的是对输入数据的每一层（即每个样本）进行归一化处理，使得每层输入的特征具有相似的分布。和批量归一化不同，批量归一化是对一批样本中的同一特征维度进行归一化，而层归一化是对单个样本的所有特征维度进行归一化。这使得层归一化在处理变长序列数据（如自然语言处理中的句子）时更加有效，因为它不依赖于批量大小，能够在不同的批量大小和序列长度下保持稳定的性能。
 
 **BN 和 LN 的区别** <br>
 1. LN中同层神经元输入拥有相同的均值和方差，不同的输入样本有不同的均值和方差；
@@ -213,7 +215,13 @@ embedding = torch.randn(batch, sentence_length, embedding_dim)
 layer_norm = nn.LayerNorm(embedding_dim)
 # Activate module
 output = layer_norm(embedding)
+
+# torch.nn.LayerNorm(normalized_shape, eps=1e-05, elementwise_affine=True)
 ```
+- **`normalized_shape`**：需要进行归一化的维度。可以是一个整数，表示最后一个维度的大小；也可以是一个元组，表示要归一化的维度的形状。例如，对于形状为 `(batch_size, seq_len, hidden_size)` 的输入，若 `normalized_shape = hidden_size` 或 `normalized_shape = (hidden_size,)`，则会对每个样本的最后一个维度（即 `hidden_size`）进行归一化。
+- **`eps`**：一个小的数值，用于在分母中防止除零错误。默认值为 `1e-05`。
+- **`elementwise_affine`**：一个布尔值，指示是否在归一化后应用可学习的仿射变换（即乘以一个可学习的权重参数并加上一个可学习的偏置参数）。默认值为 `True`。
+
 
 **手动实现** <br>
 ```python
@@ -242,6 +250,8 @@ def Layernorm(x, gamma, beta):
 **简述** <br>
 - BN注重对每个batch进行归一化，保证数据分布一致，因为判别模型中结果取决于数据整体分布。
 - 但是图像风格化中，生成结果主要依赖于某个图像实例，所以对整个batch归一化不适合图像风格化中，因而对HW做归一化。可以加速模型收敛，并且保持每个图像实例之间的独立。
+- nn.InstanceNorm2d 是 PyTorch 中 torch.nn 模块里用于构建二维实例归一化层（Instance Normalization Layer）的类，主要用于处理二维图像数据，在图像风格迁移、生成对抗网络（GAN）等任务中应用广泛。
+- 实例归一化的核心思想是对每个样本的每个通道单独进行归一化处理。与批量归一化（nn.BatchNorm2d）对一批样本的同一通道进行归一化不同，实例归一化更关注单个样本内部的特征分布。在图像风格迁移任务中，图像的风格特征往往与单个图像的局部统计信息相关，实例归一化能够更好地保留图像的风格特征，避免不同样本之间的信息干扰，从而生成更符合预期风格的图像。
 
 - [pytorch 实现](https://pytorch.org/docs/stable/generated/torch.nn.InstanceNorm2d.html#torch.nn.InstanceNorm2d)
 ```python
@@ -251,7 +261,14 @@ m = nn.InstanceNorm2d(100)
 m = nn.InstanceNorm2d(100, affine=True)
 input = torch.randn(20, 100, 35, 45)
 output = m(input)
+
+# torch.nn.InstanceNorm2d(num_features, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
 ```
+- **`num_features`**：输入特征的数量，也就是输入数据的通道数。对于形状为 `(N, C, H, W)` 的输入张量，`num_features` 对应 `C`。
+- **`eps`**：一个小的数值，用于在分母中防止除零错误。默认值为 `1e-05`。
+- **`momentum`**：用于计算移动平均和移动方差的动量值。默认值为 `0.1`，不过在实例归一化中，通常不会使用这个参数，因为实例归一化一般不跟踪全局统计信息。
+- **`affine`**：一个布尔值，指示是否在归一化后应用可学习的仿射变换（即乘以一个可学习的权重参数并加上一个可学习的偏置参数）。默认值为 `False`。
+- **`track_running_stats`**：一个布尔值，指示是否跟踪训练过程中的均值和方差统计信息。在实例归一化中，默认值为 `False`，因为实例归一化通常只关注当前样本的统计信息
 
 **手动实现** <br>
 ```python
@@ -269,8 +286,12 @@ def Instancenorm(x, gamma, beta):
 - [Instance 论文链接](https://arxiv.org/pdf/1607.08022.pdf)
 
 ## 3.4  Group Normalization
+**简述** <br>
+- nn.GroupNorm 是 PyTorch 中 torch.nn 模块提供的一种归一化层，名为组归一化（Group Normalization）。它是为了解决批量归一化（Batch Normalization）在小批量数据下效果不佳的问题而提出的，在目标检测、图像分割等计算机视觉任务以及自然语言处理等领域都有应用。
+- 组归一化将输入特征通道分成多个组，然后对每个组内的特征进行归一化处理。它不像批量归一化那样依赖于批量大小，因此在小批量数据（甚至批量大小为 1）的情况下，也能保持较好的归一化效果，有助于提高模型的训练稳定性和泛化能力。
 **原理** <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要是针对Batch Normalization对小batchsize效果差，GN将channel方向分group，然后每个group内做归一化，算(C//G)*H*W的均值，这样与batchsize无关，不受其约束。<br>
+
 
 **GroupNorm永远不再Batch维度上做平均** <br>
 
@@ -285,7 +306,14 @@ m = nn.GroupNorm(6, 6)
 m = nn.GroupNorm(1, 6)
 # Activating the module
 output = m(input)
+
+# torch.nn.GroupNorm(num_groups, num_channels, eps=1e-05, affine=True)
 ```
+
+- **`num_groups`**：分组的数量。输入特征通道会被划分为 `num_groups` 个组，要求 `num_channels` 必须能被 `num_groups` 整除。
+- **`num_channels`**：输入特征的通道数，即输入张量形状 `(N, C, H, W)` 中的 `C`。
+- **`eps`**：一个小的常量，用于避免分母为零的情况，默认值是 `1e-05`。
+- **`affine`**：布尔值，指示是否对归一化后的结果应用可学习的仿射变换（即乘以可学习的权重并加上可学习的偏置），默认值为 `True`。
 
 **手动实现** <br>
 ```python
