@@ -146,7 +146,15 @@ m = nn.BatchNorm2d(100)
 m = nn.BatchNorm2d(100, affine=False)
 input = torch.randn(20, 100, 35, 45)
 output = m(input)
+
+# torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
 ```
+
+num_features：输入特征的数量，也就是输入数据的通道数。对于形状为 (N, C, H, W) 的输入张量，num_features 对应 C。
+eps：一个小的数值，用于在分母中防止除零错误。默认值为 1e-05。
+momentum：用于计算移动平均和移动方差的动量值。默认值为 0.1。在训练过程中，批量归一化层会使用动量来更新全局的均值和方差估计。
+affine：一个布尔值，指示是否在归一化后应用可学习的仿射变换（即乘以一个可学习的权重参数并加上一个可学习的偏置参数）。默认值为 True。
+track_running_stats：一个布尔值，指示是否跟踪训练过程中的均值和方差统计信息。在训练时，会根据当前批次的数据更新这些统计信息；在推理时，会使用这些统计信息进行归一化。默认值为 True。
 
 **手动实现** <br>
 ```python
