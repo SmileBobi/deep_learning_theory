@@ -56,8 +56,11 @@ $$o_{t} = W^{oh}s_{t}$$
 ![figure4](images/rnn-figure4.jpg)
 
 **思考：正向和反向用到权重是同一份数据吗???** <br>
+不是
 **思考：反向时句子顺序需要倒序吗？** <br>
+需要
 **思考：正反向的结果，如何组合在一起？？？** <br>
+concat
 
 ## 3.7 RNN扩展到多层构成循环神经网络，结构如下：
 ![figure5](images/rnn-figure5.jpg)
