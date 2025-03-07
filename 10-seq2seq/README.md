@@ -66,6 +66,10 @@
 
 ![典型结构1](images/seq2seq-figure7.jpg)
 
+X1、X2、...、Xm是一个个Token
+从Token ——————> Vector需要经过Embedding
+从Vector ——————> Token需要经过Softmax
+
 **按序列展开形式如下：**
 
 ![典型seq2seq模型](images/seq2seq-figure6.jpg)
@@ -124,6 +128,15 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;而工程上通常使用**Luong Attention** 来改善或解决长度限制问题，Luong Attention 的原理图如下：<br>
 ![luong attention](images/seq2seq-figure14.jpg)
+
+- Ct表示Context Vector
+- 蓝色的部分表示Encoder的每一个时间步，红色的部分表示解码(decoder)的每一个时间步，Encoder和Decoder的每一个时刻都会产生一个hidden state，
+- 比如在t这个时刻，产生一个hidden state，叫做h(t)，输出一个h(t)-,这个h(t)-作为最终的预测的，它并不会把h(t)直接作为最终的输出，而是中间绕了一个过程，
+- t时刻没有直接使用t-1时刻的hidden state，而用到的是Encoder所有时间步的hidden state和当前时间步的decoder的hidden state，
+- hs表示Encoder的每一个时间步，h(t)和hs做了一个交互，交互干什么用的呢，这个时候h(t)和Encoder的每一个时间步都表示一个向量做点积，生成scale，
+有几个时间步就会生成几个标量，比如这边是五个标量，在统一的做softmax，就形成归一化的标量，
+在分别乘到对应的时间步hs，a1 * hs1、a2 * hs2...,对Encoder时候的每一个时间步的hidden state做一个加权平均，加起来得到最终的Context Vector，这个Ct就包含所有时间步的Encoder的hidden state这些信息，
+Ct在与ht做一个交互，可以是拼接起来做一个矩阵相乘，得到ht hat，采纳了当前时间步的decoder的输出和所有时间步的Encoder的输出
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整个seq2seq流程可以表述如下：<br>
 
