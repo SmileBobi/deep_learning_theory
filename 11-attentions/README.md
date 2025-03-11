@@ -64,8 +64,8 @@ $$Attention(Q, K, V)=softmax(\frac{Q K^{T}}{\sqrt{d_{k}}}) V $$
 - 输入 token 对应的输出的计算 <br>
 ![figure8](images/attention-figure8.jpg)
 
-- 第三步、计算value b1：这些系数分别与a1 Token的value(v1)、a2 Token的value(v2)、a3 Token的value(v3)、a4 Token的value(v4)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了b1
-  b1 = $\alpha_1'$
+- 第三步、计算value b1：这些系数分别与a1 Token的value(v1)、a2 Token的value(v2)、a3 Token的value(v3)、a4 Token的value(v4)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了b1 <br>
+  b1 = $\alpha_1'$ * v1 + $\alpha_2'$ * v2 + $\alpha_3'$ * v3 + $\alpha_4'$ * v4
 
 - 其它 token 对应的输出的计算 <br>
 ![figure9](images/attention-figure9.jpg)
