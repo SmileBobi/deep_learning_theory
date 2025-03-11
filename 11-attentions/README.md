@@ -65,8 +65,8 @@ $$Attention(Q, K, V)=softmax(\frac{Q K^{T}}{\sqrt{d_{k}}}) V $$
 - 输入 token 对应的输出的计算 <br>
 ![figure8](images/attention-figure8.jpg)
 
-- 第三步、计算value $b^1$：这些系数分别与 $\alpha_1$ Token的value( $v_1$)、 $\alpha_2$ Token的value( $v_2$)、 $\alpha_3$ Token的value( $v_3$)、 $\alpha_4$ Token的value( $v_4$)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了 $b^1$ <br>
-  $b^1$ = $\alpha_1'$ * $v_1$ + $\alpha_2'$ * $v_2$ + $\alpha_3'$ * $v_3$ + $\alpha_4'$ * $v_4$
+- 第三步、计算value $b^1$：这些系数分别与 $\alpha_1$ Token的value( $v^1$)、 $\alpha_2$ Token的value( $v^2$)、 $\alpha_3$ Token的value( $v^3$)、 $\alpha_4$ Token的value( $v^4$)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了 $b^1$ <br>
+  $b^1$ = $\alpha_1'$ * $v^1$ + $\alpha_2'$ * $v^2$ + $\alpha_3'$ * $v^3$ + $\alpha_4'$ * $v^4$
 
 - 其它 token 对应的输出的计算 <br>
 ![figure9](images/attention-figure9.jpg)
