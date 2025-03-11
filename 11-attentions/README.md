@@ -59,14 +59,14 @@ $$Attention(Q, K, V)=softmax(\frac{Q K^{T}}{\sqrt{d_{k}}}) V $$
 ![figure7](images/attention-figure7.jpg)
 
 - 第一步、计算权重系数：每个Token对其他Token做向量点乘，这里的向量点乘并不是说 $\alpha_1$ 向量直接乘以 $\alpha_2$ 向量，而是每个向量先拆分成Q、K、V三个矩阵，经过线性变换形成 $q^1$ 、 $k^1$ 、 $v^1$ 三个向量也就是说每个Token对应三个向量，比如图中的 $\alpha_1$ 向量分别对应 $q^1$ 、 $k^1$ 、 $v^1$ 三个向量， $\alpha_2$ 向量分别对应 $q^2$ 、 $k^2$ 、 $v^2$ 三个向量，以此类推...
-- 第二步、计算系数：第一个Token的query去询问其他Token的key得到的这个系数，比如 $\alpha_1$  Token的 $q^1$ 乘以它自己本身的 $k^1$ 得到 $\alpha_{1,1}$ 系数($q^1$ * $k^1$ = $\alpha_{1,1}$)、 $q^1$ * $k^2$得到 $\alpha_{1,2}$ 、 $q^1$ * $k^3$ 得到 $\alpha_{1,3}$ 、 $q^1$ * $k^4$得到  $\alpha_{1,4}$，这样一来就得到了四个系数，这个四个系数还要除以根号下dk的缩放操作（图中没有画出来），然后再经过softmax得到图中最上方的系数 $\alpha_{1,1}'$、 $\alpha_{1,2}'$、 $\alpha_{1,3}'$、 $\alpha_{1,4}'$（四个标量），这些系数加起来 = 1<br>
+- 第二步、计算系数：第一个Token的query去询问其他Token的key得到的这个系数，比如 $\alpha_1$  Token的 $q^1$ 乘以它自己本身的 $k^1$ 得到 $\alpha_{1,1}$ 系数($q^1$ * $k^1$ = $\alpha_{1,1}$)、 $q^1$ * $k^2$得到 $\alpha_{1,2}$ 、 $q^1$ * $k^3$ 得到 $\alpha_{1,3}$ 、 $q^1$ * $k^4$得到  $\alpha_{1,4}$，这样一来就得到了四个系数，这个四个系数还要除以 $\sqrt{d_k}$的缩放操作（图中没有画出来），然后再经过softmax得到图中最上方的系数 $\alpha_{1,1}'$、 $\alpha_{1,2}'$、 $\alpha_{1,3}'$、 $\alpha_{1,4}'$（四个标量），这些系数加起来 = 1<br>
 - $q^1$ * $k^1$ = $\alpha_{1,1}$<br>$q^1$ * $k^2$ = $\alpha_{1,2}$<br>$q^1$ * $k^3$ = $\alpha_{1,3}$<br>$q^1$ * $k^4$ = $\alpha_{1,4}$<br>$\alpha_{1,1}'$ + $\alpha_{1,2}'$ + $\alpha_{1,3}'$ + $\alpha_{1,4}'$ = 1
 
 - 输入 token 对应的输出的计算 <br>
 ![figure8](images/attention-figure8.jpg)
 
 - 第三步、计算value b1：这些系数分别与a1 Token的value(v1)、a2 Token的value(v2)、a3 Token的value(v3)、a4 Token的value(v4)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了b1 <br>
-  b1 = $\alpha_1'$ * v1 + $\alpha_2'$ * v2 + $\alpha_3'$ * v3 + $\alpha_4'$ * v4
+  b1 = $\alpha_1'$ * $v_1$ + $\alpha_2'$ * $v_2$ + $\alpha_3'$ * $v_3$ + $\alpha_4'$ * $v_4$
 
 - 其它 token 对应的输出的计算 <br>
 ![figure9](images/attention-figure9.jpg)
