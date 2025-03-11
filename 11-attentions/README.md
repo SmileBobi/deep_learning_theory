@@ -58,8 +58,14 @@ $$Attention(Q, K, V)=softmax(\frac{Q K^{T}}{\sqrt{d_{k}}}) V $$
 - 单个 token 权重系数的计算 <br>
 ![figure7](images/attention-figure7.jpg)
 
+- 讲解
+- 第一步、计算权重系数：每个Token对其他Token做向量点乘，这里的向量点乘并不是说a1向量直接乘以a2向量，而是每个向量先要经过Q、K、V三个矩阵形成q1、k1、v1三个向量，也就是说每个Token对应三个向量，比如图中的a1 Token分别对应q1、k1、v1三个向量
+- 第二步、计算系数：第一个Token的query去询问其他Token的key得到的这个系数，比如a1 Token的q1乘以它自己本身的k1得到a11系数、q1 * k2得到a12、q1 * k3得到a13、q1 * k4得到a14，这样一来就得到了四个系数，这个四个系数还要除以根号下dk的缩放操作（图中没有画出来），然后再经过softmax得到图中最上方的系数（是四个标量），这些系数加起来=1，
+
 - 输入 token 对应的输出的计算 <br>
 ![figure8](images/attention-figure8.jpg)
+
+- 第三步、计算value b1：这些系数分别与a1 Token的value(v1)、a2 Token的value(v2)、a3 Token的value(v3)、a4 Token的value(v4)相乘，分别得到四个新的向量，再将这四个向量加起来就得到了b1
 
 - 其它 token 对应的输出的计算 <br>
 ![figure9](images/attention-figure9.jpg)
