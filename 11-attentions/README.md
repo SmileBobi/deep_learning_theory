@@ -71,6 +71,13 @@ $$Attention(Q, K, V)=softmax(\frac{Q K^{T}}{\sqrt{d_{k}}}) V $$
 - 其它 token 对应的输出的计算 <br>
 ![figure9](images/attention-figure9.jpg)
 
+- 真实数据举例
+![figure9](images/attention-figure-eg.jpg)
+
+### 4.2.4 写成矩阵的形式
+- 矩阵化 Q K V 的获取过程：<br>
+![figure10](images/attention-figure10.jpg)
+
 - 假设输入的形状是(batch_size, seq_len, embed_dim)，batch_size表示几个句子，seq_len表示句子的长度，embed_dim表示维度（常用值为 128、256、300、512）
 - 在工程上， $\alpha_1$ 、 $\alpha_2$ 、 $\alpha_3$ 、 $\alpha_4$ 虽说是四个Token，但是通常放到一个Tensor里面来表示四个Token，seq_len这个维度表示 $\alpha_1$ 、 $\alpha_2$ 、 $\alpha_3$ 、 $\alpha_4$  、...、 $\alpha_n$ 
 - 一个Tensor怎么操作才高效呢？统一的乘以一个 $w^q$ 矩阵，就会得到 $
@@ -100,13 +107,6 @@ $、 $
  . \\
  v^n
 \end{bmatrix} $ 这两个矩阵
-
-- 真实数据举例
-![figure9](images/attention-figure-eg.jpg)
-
-### 4.2.4 写成矩阵的形式
-- 矩阵化 Q K V 的获取过程：<br>
-![figure10](images/attention-figure10.jpg)
 
 - attention score 的获取写成矩阵形式 <br>
 ![figure11](images/attention-figure11.jpg)
