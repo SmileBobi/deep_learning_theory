@@ -85,7 +85,7 @@ $$
 \end{bmatrix}
 $$
 这个矩阵，同样的乘以一个 $w^k$ 、 $w^v$ 矩阵，分别得到
-$$
+$
 \begin{bmatrix}
  k^1 \\
  k^2 \\
@@ -94,8 +94,8 @@ $$
  . \\
  k^n
 \end{bmatrix}
-$$、
-$$
+$、
+$
 \begin{bmatrix}
  v^1 \\
  v^2 \\
@@ -103,7 +103,7 @@ $$
  v^4 \\
  . \\
  v^n
-\end{bmatrix} 这两个矩阵
+\end{bmatrix} $ 这两个矩阵
 
 - 真实数据举例
 ![figure9](images/attention-figure-eg.jpg)
