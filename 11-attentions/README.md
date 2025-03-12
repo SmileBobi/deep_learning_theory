@@ -142,6 +142,8 @@ $、 $
 - [1,8,12,12] * [1,8,12,64] = [1,8,12,64]
 - 再把8个头合并成单头，再经过 transpose 或者 petmute 把8和12交换下位置，[1,8,12,64] ---> [1,12,8,64],再用reshape把8和64合并起来变成[1,12,512]
 
+![figure14-1](images/attention-figure14-1.jpg)
+
 ## 5.2 公式表达
 
 $$MultiHead(Q, K, V) = Concat(head_{1}, \ldots, head_{h}) W^{O} $$
