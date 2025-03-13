@@ -38,8 +38,10 @@ print("data: ", data2)
 ## 1.4 从numpy生成
 ```python
   np_array = np.array([1, 2, 3])
+  # torch.from_numpy方法：当np_array中元素发生变化后，tensor_numpy中对应的元素也会发生变化，它们是共享内存的
   tensor_numpy = torch.from_numpy(np_array)
-  # tensor_numpy2 = torch.Tensor(np_array) # deepcopy 了一份数据
+  # torch.Tensor：只是复制一份，当np_array中元素发生变化后，tensor_numpy2中对应的元素不会发生变化
+  tensor_numpy2 = torch.Tensor(np_array) # deepcopy 了一份数据
   np_array[0] = 100
   data_numpy = tensor_numpy.numpy()
   # print("data numpy: ", type(data_numpy))
