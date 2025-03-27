@@ -1,5 +1,9 @@
 # 0 LLM简史：从Transformer（2017）到DeepSeek-R1（2025）
 
+- [Newst Address](https://mp.weixin.qq.com/s/R45FqZ8JMzFLkEz6LymNOg)
+- [A Survey of Large Language Models](https://arxiv.org/pdf/2303.18223)
+
+
 ![cover_image](https://mmbiz.qpic.cn/mmbiz_jpg/8AEic8PL2YEp3Vpx1hKpj932kjKQ7Sia5Fj4yPvibTZgEMyuGvAsvVNfgy4WdYn0xc8n01mG68MXLrmeLelKUGadQ/0?wx_fmt=jpeg)
 
 

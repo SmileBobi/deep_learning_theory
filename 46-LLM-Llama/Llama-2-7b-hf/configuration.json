@@ -1,0 +1,10 @@
+{
+    "framework": "pytorch",
+    "task": "text-generation",
+    "model": {
+        "type": "llama2"
+    },
+    "pipeline": {
+        "type": "llama2-text-generation-pipeline"
+    }
+}
