@@ -268,7 +268,7 @@ Hugging Face 团队实现了与 LLaMA 兼容的模型类（LlamaForCausalLM）�
 
 ## 7.1 OpenAI-o1：推理能力的一大飞跃(2024)
 
-&nbsp;&nbsp;&nbsp;&nbsp;OpenAI于2024年12月发布的o1模型旨在提高AI的推理能力，特别是在代码生成和调试等复杂任务上表现出色。o1模型的一个关键特征是通过 **「思维链」(Chain of Thought－CoT)过程**增强推理能力，使其能够将复杂问题分解为更小、更易管理的步骤。
+&nbsp;&nbsp;&nbsp;&nbsp;OpenAI于2024年12月发布的o1模型旨在提高AI的推理能力，特别是在代码生成和调试等复杂任务上表现出色。o1模型的一个关键特征是通过 **「思维链」([Chain of Thought－CoT](https://github.com/SmileBobi/deep_learning_theory/tree/main/50-Chain-of-Thought))过程**增强推理能力，使其能够将复杂问题分解为更小、更易管理的步骤。
 
 **推理时间计算与能力**
 
