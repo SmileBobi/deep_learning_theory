@@ -50,6 +50,9 @@ $$o_{t} = W^{oh}s_{t}$$
 ## 3.5 RNN 工程图展示：
 ![figure3](images/rnn-figure3.jpg)
 
+nlp:[N,Seq,h]
+rnn:[Seq,N,h]
+
 **思考：每个时间步为何没有矩阵相乘呢？**
 
 ## 3.6 RNN可扩展到双向的情况，其结构如下：<br>
