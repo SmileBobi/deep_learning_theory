@@ -145,7 +145,30 @@ res.size()
 
 **思考：在训练和推理时有何不同？？？**
 
+> pytorch的模型有两种模式，在module模块里面有个`training`属性，也有对应的API，里面明确指出了这个
+>
+> 在BatchNorm采用训练时计算的结果（E和Var），应用到测试或者推理的时候
+>
+> 在Dropout后续会说，训练会drop掉，但推理不会，会改成（1-rate）
+
+```python
+def train(self: T, mode: bool = True) -> T:
+    r"""Set the module in training mode.
+
+    This has any effect only on certain modules. See documentations of
+    particular modules for details of their behaviors in training/evaluation
+    mode, if they are affected, e.g. :class:`Dropout`, :class:`BatchNorm`,
+    etc.
+
+    Args:
+        mode (bool): whether to set training mode (``True``) or evaluation
+                     mode (``False``). Default: ``True``.
+```
+
+
+
 - [pytorch 实现](https://pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html#torch.nn.BatchNorm2d)
+
 ```python
 # With Learnable Parameters
 m = nn.BatchNorm2d(100)
@@ -174,7 +197,7 @@ def Batchnorm(x, gamma, beta, bn_param):
     eps = 1e-5
 
     x_mean = np.mean(x, axis=(0, 2, 3), keepdims=True)
-    x_var = np.var(x, axis=(0, 2, 3), keepdims=True0)
+    x_var = np.var(x, axis=(0, 2, 3), keepdims=True)
     x_normalized = (x - x_mean) / np.sqrt(x_var + eps)
     results = gamma * x_normalized + beta
 
@@ -205,7 +228,7 @@ def Batchnorm(x, gamma, beta, bn_param):
 
 **CV 和 NLP 中 LN的区别** <br>
 ![image](https://ask.qcloudimg.com/http-save/yehe-6930088/b6febb5b50b5392efe0d408629580481.png)
-   
+
 - [pytorch 实现](https://pytorch.org/docs/stable/generated/torch.nn.LayerNorm.html#torch.nn.LayerNorm)
 ```python
 import torch
@@ -344,6 +367,58 @@ SN是一种覆盖特征图张量各个维度来计算统计信息的归一化方
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layer normalization 重要的两个部分是平移不变性和缩放不变性。Root Mean Square Layer Normalization 认为 layer normalization 取得成功重要的是缩放不变性，而不是平移不变性。因此，去除了计算过程中的平移，只保留了缩放，进行了简化，提出了RMS Norm (Root Mean Square Layer Normalization)，即均方根 norm。<br>
 
 - [论文链接](https://arxiv.org/pdf/1910.07467.pdf)
+
+## 3.7 DeepNorm补充
+
+DeepNorm 是微软在 2022 年提出的改进方法（论文 *"[DeepNet: Scaling Transformers to 1,000 Layers](https://arxiv.org/abs/2203.00555)"*），**基于 Post-Norm 但大幅提升了深层训练的稳定性**，可支持超深层（如 1000 层）Transformer 的训练。
+
+![image-20250409164334392](https://coderethan-1327000741.cos.ap-chengdu.myqcloud.com/blog-pics/image-20250409164334392.png)
+
+![image-20250409162034019](https://coderethan-1327000741.cos.ap-chengdu.myqcloud.com/blog-pics/image-20250409162034019.png)
+
+**原始残差结构:**
+$$
+x_{l+1} = LayerNorm(x_l + F(x_l))
+$$
+**DeepNorm:**
+$$
+x_{l+1} = \text{LN}(\alpha \cdot x_l + G_l(x_l, \theta_l))
+$$
+![image-20250409164837814](https://coderethan-1327000741.cos.ap-chengdu.myqcloud.com/blog-pics/image-20250409164837814.png)
+
+**思考：**DeepNorm中的$\beta$是哪里的参数？
+
+## 3.8 DyT补充
+
+> 2025：Transformers without normlization
+
+归一化层在现代神经网络中无处不在，长期以来被认为是必不可少的。 本工作证明，使用一种非常简单的技术，无归一化的Transformer可以达到相同或更好的性能。 **我们引入了动态双曲正切函数(DyT)，一种逐元素运算$DyT⁢(𝒙)=tanh⁡(α⁢𝒙)$，作为Transformer中归一化层的直接替代。** DyT的灵感来自于这样的观察：Transformer中的层归一化通常会产生类似tanh函数的S形输入-输出映射。 通过结合DyT，无归一化的Transformer可以匹配或超越其归一化对应物的性能，大部分情况下无需超参数调整。 我们在不同的环境中验证了具有DyT的Transformer的有效性，范围从识别到生成，从监督学习到自监督学习，以及从计算机视觉到语言模型。 这些发现挑战了归一化层在现代神经网络中不可或缺的传统认识，并为其在深度网络中的作用提供了新的见解。
+
+[论文连接](https://yiyibooks.cn/arxiv/2503.10622v1/index.html)
+
+伪代码：
+
+```python
+# input x has the shape of [B, T, C]
+# B: batch size, T: tokens, C:dimension
+
+class DyT(Module):
+    def __init__(self, C, init_⍺):
+        super().__init__()
+        self.⍺ = Parameter(ones(1) * init_α)
+        self.γ = Parameter(ones(C))
+        self.β = Parameter(zeros(C))
+        
+    def forward(self, x):
+        x = tanh(self.alpha * x)
+        return self.γ * x + self.β 
+```
+
+
+
+> Note：整体回顾一下算子部分，引入后面的算子，不然大脑还停留在norm部分
+
+
 
 # 4 Pooling
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pooling(池化)是CNN 中常用的操作，通过在特定区域内对特征进行(reduce)来实现的。<br>
@@ -661,4 +736,3 @@ output = m(input)
 - [激活函数汇总](http://spytensor.com/index.php/archives/23/?xqrspi=xnemo1) <br>
 - [激活函数综述](https://www.xhuqk.com/xhdxxbzkb/article/doi/10.12198/j.issn.1673-159X.3761) <br>
 - [Activation 可视化](https://dashee87.github.io/deep%20learning/visualising-activation-functions-in-neural-networks/) <br>
-  

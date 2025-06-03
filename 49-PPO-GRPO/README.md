@@ -214,3 +214,140 @@ GRPO的优势：在大型语言模型中，它消除了对单独价值网络的�
 希望这篇文章能帮助你自然地掌握PPO和GRPO。如果你对过程监督或迭代强化学习等话题感兴趣，请关注我的博客以获取更多更新。
 
 # 5 PPO 训练细节
+- [论文地址-EN](https://arxiv.org/pdf/1707.06347)
+- [论文地址-CN](https://yiyibooks.cn/arxiv/1707.06347v2/index.html)
+- [Secrets of RLHF](https://arxiv.org/pdf/2401.06080)
+
+![alt text](image-3.png)
+
+![alt text](image-5.png)
+
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+## 5.1 ratio
+
+![alt text](image-4.png)
+
+*ratio表示新旧策略在相同状态下选择某个动作的概率比值，即 π_new(a|s) / π_old(a|s)，这一比值被称为重要性采样比率（Importance Sampling Ratio）。它用于衡量新策略相对于旧策略的动作选择概率变化，是策略优化过程中评估动作价值的重要依据*
+
+ratio 仅针对新粗略实际选择的token计算，与其他token无关。
+
+**example:**
+```bash
+旧策略：P(“mat”)=0.6，P(“rug”)=0.1；
+新策略：P(“mat”)=0.75，P(“rug”)=0.3；
+若新策略选择“rug”：
+ratio = 0.3 / 0.1 = 3；
+旧策略未选择“rug”的概率会被忽略。
+```
+
+## 5.2 Advantage 优势函数
+
+# GAE（Generalized Advantage Estimation）公式说明
+
+### 1. 时间步差值（Delta）计算
+时间步差值 \(\delta_t\) 表示当前时间步的优势估计，其公式如下：
+
+\[
+\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)
+\]
+
+其中：
+- \(r_t\): 当前时间步的奖励
+- \(V(s)\): 值函数（Critic）对状态 \(s\) 的预测值
+- \(\gamma\): 折扣因子（通常取值范围为 0.9 ~ 0.99）
+
+---
+
+### 2. GAE 累积计算
+GAE 的累积优势函数 \(A_t\) 通过加权求和多个时间步差值 \(\delta_t\) 来计算，其公式如下：
+
+$$A_t = \sum_{k=0}^{T-t} (\gamma \lambda)^k \delta_{t+k}$$
+
+其中：
+- \(\lambda\): 平衡偏差与方差的超参数（通常取值范围为 0.95 ~ 0.99）
+- \(T\): 时间步总数
+- \((\gamma \lambda)^k\): 指数衰减权重
+
+在实际实现中，通常采用反向递归的方式高效计算。
+
+---
+
+### 3. 归一化处理
+为了稳定训练，通常对优势函数 \(A_t\) 进行标准化处理，包括以下步骤：
+1. 计算所有时间步优势值的均值 \(\mu_A\) 和标准差 \(\sigma_A\)。
+2. 对每个时间步的优势值进行标准化：
+
+\[
+\hat{A}_t = \frac{A_t - \mu_A}{\sigma_A}
+\]
+
+这种方式可以减少训练过程中梯度爆炸或消失的风险，从而提升模型稳定性。
+
+### 4 奖励函数
+
+![alt text](image-9.png)
+
+## 5.3 代码实现
+- [](https://github.com/dkarunakaran/ppo-pytorch#)
+
+
+# 6 GRPO 论文
+- [论文地址-EN](https://arxiv.org/pdf/2402.03300)
+- [论文地址-EN](https://yiyibooks.cn/arxiv/2402.03300v3/index.html)
+
+## 6.1 相关公式
+- 公式
+![alt text](image-10.png)
+
+- kl-散度
+![alt text](image-11.png)
+
+- AGE 函数
+![alt text](image-12.png)
+
+## 6.2 图表解释
+
+![alt text](image-13.png)
+
+![alt text](image-15.png)
+
+## 6.3 举例
+```python
+Query: “What is 2 + 3?”
+
+Step 1: LLM generates three answers.
+1. “5”
+2. “6”
+3. “2 + 3 = 5”
+
+Step 2: Each answer is scored.
+1. “5” → 1 points (correct, no reasoning)
+2. “6” → 0 points (incorrect)
+3. “2 + 3 = 5” → 2 points (correct, w/ reasoning)
+
+Step 3: Compute avg score for entire group.
+Avg score = (1 + 0 + 2) / 3 = 1
+
+Step 4: Compare each answer score to avg.
+1. “5” → 0  (same as avg)
+2. “6” → -1 (below avg)
+3. “2 + 3 = 5” → 1 (above avg)
+
+Step 5: Reinforce LLM to favor higher scores.
+1. Favor responses like #3 (positive)
+2. Maintain responses like #1 (neutral)
+3. Avoid responses like #2 (negative)
+
+This process is repeated, allowing the model to learn and improve over time.
+```
+
+
+# 参考文档
+- [PPO: Proximal Policy Optimization](https://arxiv.org/abs/1707.06347)
+- [PPO-GRPO 公式详解](https://yugeten.github.io/posts/2025/01/ppogrpo/)
