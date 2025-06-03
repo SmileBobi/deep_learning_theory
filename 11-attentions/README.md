@@ -111,6 +111,8 @@ $、 $
 - attention score 的获取写成矩阵形式 <br>
 ![figure11](images/attention-figure11.jpg)
 
+- A方阵（维度：batch * seq * seq）叫做attention score，后面要进行缩放除以根 $\sqrt{d_k}$ ，做完softmax得到A’，课本上是按照列进行softmax，工程上是按照行进行softmax的
+
 **得到的矩阵我们称之为 Attenion Matrix.**
 
 - Value 加权平均过程 写成矩阵形式 <br>
