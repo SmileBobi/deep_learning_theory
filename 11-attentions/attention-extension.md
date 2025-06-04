@@ -309,7 +309,7 @@ $$\Theta(N^2d^2M^{-1})$$
 
 # 10 大模型推理加速利器：KV Cache
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设 K 和 V 能直接存在缓存中，模型规模小还好，一旦模型规模很大长度很长时，KV 根本就存不进缓存。<br>
-- [KV Cache 课件链接](https://github.com/Elvin-Ma/ai_papers/blob/main/attention_optimize/kv-cache.md)
+- [KV Cache 课件链接](https://github.com/SmileBobi/ai_papers/blob/main/attention_optimize/kv-cache.md)
 
 # 11 大模型推理加速利器：Page-Attention and vLLM
 - PagedAttention <br>
