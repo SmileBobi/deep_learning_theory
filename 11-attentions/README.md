@@ -177,7 +177,7 @@ $$where head_{i} = Attention(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V})$$
   ![encoder-shaped-model](images/encoder_shaped.jpg)
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![encoder-shaped-model1](images/encoder_shaped1.jpg)
      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![encoder-shaped-model2](images/encoder_shaped2.jpg)
-- MatMul和Add操作相当于Linear，就是一个input分别乘以三个不同的Linear之后分别**得到Q、K、V三个矩阵**，再做Reshape，Reshape这块就是拆多头，这边拆了16个头，每个头维度为64，所以Q、K的维度都是[2,14,16,64]，之后再做Transpose或者Permute把头的维度往前、把seq的维度往后，互换下位置（ONNX中是Transpose，Pytorch中是Permute），正常情况都是[2,14,16,64]，但是图中有一路分支是[2,16,64,14]（工程上是 Q*K.T，K有个转置，这边多加了个转置操作），严格意义上来讲**①号分支是K，②号分支是Q**。往下走做了个MatMul得到Attention Score方阵[2,16,14,14]，再往下走有个Div 除以8，就是做的scale；**最左边input3这个分支就是做的Mask 掩码**。Add就是做mask，然后softmax归一化得到标准的Attention Score，之后做Dropout（论文中没有，工程上在训练的时候要有，推理时要去掉），然后MatMul就是做加权平均
+- MatMul和Add操作相当于Linear，就是一个input分别乘以三个不同的Linear之后分别**得到Q、K、V三个矩阵**，再做Reshape，Reshape这块就是拆多头，这边拆了16个头，每个头维度为64，所以Q、K的维度都是[2,14,16,64]，之后再做Transpose或者Permute把头的维度往前、把seq的维度往后，互换下位置（ONNX中是Transpose，Pytorch中是Permute），正常情况都是[2,14,16,64]，但是图中有一路分支是[2,16,64,14]（工程上是 Q*K.T，K有个转置，这边多加了个转置操作），严格意义上来讲**①号分支是K，②号分支是Q**。往下走做了个MatMul得到Attention Score方阵[2,16,14,14]，再往下走有个Div 除以8，就是做的scale缩放；**最左边input3这个分支就是做的Mask 掩码**。Add就是做mask，然后softmax归一化得到标准的Attention Score，之后做Dropout（论文中没有，工程上在训练的时候要有，推理时要去掉），然后MatMul就是做加权平均
 - 一个Encoder有两个sub block（子单元），分别是Attention、FFN/MLP。
 - Attention核心有两个MatMul，第一个MatMul是用来**计算Attention Score**，第二个MatMul是用来**做加权平均**，做加权平均的时候才会用到V，主要是对V做加权平均，所以需要V。那么**③号分支就对应的是V**。
 - **④号分支是做残差链接**。
