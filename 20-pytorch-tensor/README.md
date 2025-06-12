@@ -54,8 +54,8 @@ def numpy_with_torch_tensor():
   tensor = torch.tensor(ndarray)
   tensor_from_numpy = torch.from_numpy(ndarray)
   
-  print("numpy data_ptr: ", ndarray.ctypes.data)
-  print("torch data_ptr: ", tensor.data_ptr())
+  print("numpy data_ptr: ", ndarray.ctypes.data) // 查看地址空间
+  print("torch data_ptr: ", tensor.data_ptr())   // 查看地址空间
   print("tensor_from numpy data_ptr: ", tensor_from_numpy.data_ptr())
 
   ndarray_from_torch = tensor_from_numpy.numpy()
